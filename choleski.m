@@ -10,8 +10,8 @@ function L = choleski_decom(A)
     
     for j = 1:n
         % calculating the diagonal terms first
-        temp = A(j,j) - dot(A(j, 1:j-1), A(1, 1:j-1));
-        
+        temp = A(j,j) - dot(A(j, 1:j-1), A(j, 1:j-1));
+        disp(temp)
         if temp < 0.0
             error('Matrix is not positive definite')
         end
@@ -20,11 +20,12 @@ function L = choleski_decom(A)
         
         % calculating the non-diagonal terms
         for i=j+1:n
-            A(i,j) = A(i,j) - dot(A(j,1:j-1), A(j, 1:j-1));
+            A(i,j) = (A(i,j) - dot(A(i,1:j-1), A(j, 1:j-1)))/ A(j,j);
         end
         
     end
     
+    L = tril(A)
 end
 
             
