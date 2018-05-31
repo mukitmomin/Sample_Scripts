@@ -1,11 +1,17 @@
+A = [ 4 -2 2
+-2 2 -4
+2 -4 11];
+
+L = choleski_decom(A)
+
 % A = LL'. This fucntion calculated L given A
-funciton L = choleski_decom(A)
+function L = choleski_decom(A)
     n = size(A,1);
     
     for j = 1:n
         % calculating the diagonal terms first
-        temp = A(j,j) - dot(A(j, 1:j-1), A(1, j-1));
-        
+        temp = A(j,j) - dot(A(j, 1:j-1), A(j, 1:j-1));
+        disp(temp)
         if temp < 0.0
             error('Matrix is not positive definite')
         end
@@ -14,6 +20,25 @@ funciton L = choleski_decom(A)
         
         % calculating the non-diagonal terms
         for i=j+1:n
-            
+            A(i,j) = (A(i,j) - dot(A(i,1:j-1), A(j, 1:j-1)))/ A(j,j);
         end
+        
+    end
+    
+    L = tril(A)
+end
+
+function x = choleskiSoln(L,b)
+% solves [L][L']{x} = {b}
+
+n = length(b)   % the constants vector
+
+if size(b,2) > 1; b = b'; end
+
+for k = 1:n
+   b(k) = ( b(k) - dot(L(k, 1:k-1), b(1:k-1)')); 
+end
+
+end
+
             
